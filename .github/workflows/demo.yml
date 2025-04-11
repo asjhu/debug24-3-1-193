@@ -14,16 +14,23 @@ jobs:
         id: bt_secret
         uses: BeyondTrust/secrets-safe-action@v1
         with:
-          SECRET_PATH: '[{"path": "LabDeploy-ESO/postgres/pg_root_password","output_id": "pg_passwd"}
+          SECRET_PATH: '[{"path": "GitHub - BTSolution-Engineering/iac_project2/AWS_ClientID","output_id": "AWS_ClientID"},
+                         {"path": "GitHub - BTSolution-Engineering/iac_project2/AWS_ClientSecret","output_id": "AWS_Client-Secret"}, 
+                         {"path": "GitHub - BTSolution-Engineering/iac_project2/Sra-Client-Id","output_id": "Sra-Client-Id"}, 
+                         {"path": "GitHub - BTSolution-Engineering/iac_project2/Sra-Client-Secret","output_id": "Sra-Client-Secret"},
+                         {"path": "GitHub - BTSolution-Engineering/iac_project2/Entra_Tenant_Join","output_id": "Entra_Tenant_Join"},
+                         {"path": "GitHub - BTSolution-Engineering/iac_project2/EPMLC-Join","output_id": "EPMLC-Join"}
                          ]'
+
         env:
           API_URL: ${{ secrets.API_URL }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
 
+
       - name: print secrets
         env:
-          MY_SECRET: ${{ steps.bt_secret.outputs.pg_passwd }}
+          MY_SECRET: ${{ steps.bt_secret.outputs.Entra_Tenant_Join }}
         shell: bash
         run: |
               echo "$MY_SECRET" >> adb.tf

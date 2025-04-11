@@ -1,0 +1,29 @@
+name: 'PWS GitHub Actions'
+on:
+  - pull_request
+  - push
+env:
+  TF_Action: destroy # apply Or destroy are your options #
+jobs:
+  pws:
+    name: 'PWS'
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@main
+      - name: BeyondTrust-GA
+        id: bt_secret
+        uses: BeyondTrust/secrets-safe-action@v1
+        with:
+          SECRET_PATH: '[{"path": "LabDeploy-ESO/postgres/pg_root_password","output_id": "pg_passwd"}
+                         ]'
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
+      - name: print secrets
+        env:
+          MY_SECRET: ${{ steps.bt_secret.outputs.pg_passwd }}
+        shell: bash
+        run: |
+              echo "$MY_SECRET" >> adb.tf
