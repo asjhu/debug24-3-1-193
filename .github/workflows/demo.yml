@@ -27,34 +27,3 @@ jobs:
         shell: bash
         run: |
               echo "$MY_SECRET" >> adb.tf
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        id: bt_secret
-        uses: BeyondTrust/secrets-safe-action@v1
-        with:
-          SECRET_PATH: {"path": "LabDeploy-ESO/postgres/pg_root_password","output_id": "pg_passwd"}
-
-        env:
-          API_URL: ${{ secrets.api_url }}
-          CLIENT_ID: ${{ secrets.Cclient_id }}
-          CLIENT_SECRET: ${{ secrets.Cclient_secret }}
-
-
-      - name: print secrets
-        env:
-          MY_SECRET: ${{ steps.bt_secret.outputs.pg_passwd }}
-        shell: bash
-        run: |
-              echo "$MY_SECRET" >> adb.tf
