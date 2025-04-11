@@ -34,3 +34,39 @@ jobs:
         shell: bash
         run: |
               echo "$MY_SECRET" >> adb.tf
+
+      - name: 'Terraform Init'
+        id: init
+        run: terraform init -backend-config="access_key=${{ steps.bt_secret.outputs.AWS_ClientID }}" -backend-config="secret_key=${{ steps.bt_secret.outputs.AWS_Client-Secret }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Terraform Validate'
+        id: validate
+        run: terraform validate
+
+      - name: 'Terraform Plan'
+        id: plan
+        run: terraform plan 
+        continue-on-error: true 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TF_VAR_BT_CLIENT_ID: ${{ steps.bt_secret.outputs.Sra-Client-Id }}
+          TF_VAR_BT_CLIENT_SECRET: ${{ steps.bt_secret.outputs.Sra-Client-Secret }}
+          TF_VAR_AWS_CLIENT_ID: ${{ steps.bt_secret.outputs.AWS_ClientID }}
+          TF_VAR_AWS_CLIENT_SECRET: ${{ steps.bt_secret.outputs.AWS_Client-Secret }}
+          TF_VAR_Entra_Tenant_Join: ${{ steps.bt_secret.outputs.Entra_Tenant_Join }}
+          TF_VAR_EPMLC-Join: ${{ steps.bt_secret.outputs.EPMLC-Join }}
+
+
+      - name: Terraform Action (Apply / Destroy)
+        id: apply
+        run: terraform $TF_Action -auto-approve
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TF_VAR_BT_CLIENT_ID: ${{ steps.bt_secret.outputs.Sra-Client-Id }}
+          TF_VAR_BT_CLIENT_SECRET: ${{ steps.bt_secret.outputs.Sra-Client-Secret }}
+          TF_VAR_AWS_CLIENT_ID: ${{ steps.bt_secret.outputs.AWS_ClientID }}
+          TF_VAR_AWS_CLIENT_SECRET: ${{ steps.bt_secret.outputs.AWS_Client-Secret }}
+          TF_VAR_Entra_Tenant_Join: ${{ steps.bt_secret.outputs.AWS_Entra_Tenant_Join }}
+          TF_VAR_EPMLC-Join: ${{ steps.bt_secret.outputs.EPMLC-Join }}
