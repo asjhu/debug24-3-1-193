@@ -3,7 +3,7 @@ on:
   - pull_request
   - push
 env:
-  TF_Action: destroy # apply Or destroy are your options #
+  TF_Action: apply # apply Or destroy are your options #
 jobs:
   pws:
     name: 'PWS'
